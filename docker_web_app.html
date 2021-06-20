@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <title>Docker Web App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+</head>
+<body >
+    <h1 class='first'>DOCKER WEB APPLICATION</h1>
+    <h2 class='second'>Choose any of the Following Commands</h2>
+    <div class='row'>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker images -->
+                <div class="container">List Docker Images</div>
+                <p class="card__apply"><button id="myBtn1" class="myBtn">Run</button></p>
+            </div>
+        </div>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker pull-->
+                <div class="container">Download Docker Images</div>
+                <input id="image_name2" class="input1" type="text" placeholder="Image name" />
+                <button id="myBtn2" class="myBtn">Run</button></p>
+            </div><br><br>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker ps -->
+                <div class="container">List Running Docker Container</div>
+                <p class="card__apply"><button id="myBtn3" class="myBtn">Run</button>
+            </div>
+        </div>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker run -->
+                <div class="container">Launch Container in Docker</div>
+                <input id="image_name1" class="input1" type="text" placeholder="Image name" />
+                <button id="myBtn4" class="myBtn">Run</button></p>
+            </div><br><br>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker rm -f -->
+                <div class="container">Delete docker Container</div>
+                <input id="image_name3" class="input1" type="text" placeholder="Container Name" />
+                <p class="card__apply"><button id="myBtn5" class="myBtn">Run</button></p>
+            </div>
+        </div>
+        <div class='col'>
+            <div class='card'>
+                <!-- docker exec -->
+                <div class="container">Execute Program in Docker </div>
+                <input id="container_name" class="input1" type="text" placeholder="Container name" />
+                <input id="command_name" class="input2" type="text" placeholder="Command name" />
+                <p class="card__apply"><button id="myBtn6" class="myBtn">Run</button>
+            </div><br><br>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Output:-</h2>
+            </div>
+            <p id="text" class="modal-body">
+                Please wait...
+            </p>
+        </div>
+
+    </div>
+</body>
+<script>
+    var btn1 = document.getElementById("myBtn1");
+    var btn2 = document.getElementById("myBtn2");
+    var btn3 = document.getElementById("myBtn3");
+    var btn4 = document.getElementById("myBtn4");
+    var btn5 = document.getElementById("myBtn5");
+    var btn6 = document.getElementById("myBtn6");
+    var modal = document.getElementById("myModal");
+
+    btn1.onclick = function () {
+        modal.style.display = "block";
+
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=images", "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText;
+        }
+    }
+
+    btn2.onclick = function () {
+        modal.style.display = "block";
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=download&y=" + document.getElementById('image_name2').value, "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText;
+        }
+    }
+
+    btn3.onclick = function () {
+        modal.style.display = "block";
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=list", "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText;
+        }
+    }
+
+    btn4.onclick = function () {
+        modal.style.display = "block";
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=run&y=" + document.getElementById('image_name1').value, "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText + "Container Launched";
+        }
+    }
+    btn5.onclick = function () {
+        modal.style.display = "block";
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=rm&y=" + document.getElementById('image_name3').value, "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText + "Container Removed";
+        }
+    }
+
+    btn6.onclick = function () {
+        modal.style.display = "block";
+        var objXHR = new XMLHttpRequest();
+        objXHR.open("GET", "http://192.168.29.229/cgi-bin/python.py?x=exec&y=" + document.getElementById('container_name').value+"&z="+ document.getElementById('command_name').value, "true");
+        objXHR.send();
+
+        objXHR.onload = function () {
+            document.getElementById("text").innerHTML = objXHR.responseText;
+        }
+    }
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+ </script>
+</html>
